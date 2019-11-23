@@ -12,7 +12,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   DateTime _actualDate;
-  String _date;
+  String _date = 'Select Date';
+  Iterable<CallLogEntry> _callLogdialedEntries = [];
 
   TabController _tabController;
 
@@ -49,6 +50,7 @@ class _HomePageState extends State<HomePage>
                   _date = '${date.year} - ${date.month} - ${date.day}';
                   setState(() {});
                 }, currentTime: DateTime.now(), locale: LocaleType.en);
+
                 getDialedCalls();
               },
               child: Container(
@@ -139,7 +141,7 @@ class _HomePageState extends State<HomePage>
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.all(5),
-                    child: _actualDate == null ? _date : dialedList(),
+                    child: dialedList(),
                   ),
                   Container(
                     padding: EdgeInsets.all(5),
@@ -163,13 +165,17 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Iterable<CallLogEntry> _callLogdialedEntries = [];
   getDialedCalls() async {
-    _callLogdialedEntries = await CallLog.query(
+    CallLog.query(
       dateFrom: _actualDate.millisecondsSinceEpoch,
       dateTo: _actualDate.millisecondsSinceEpoch + 86400,
       type: CallType.outgoing,
-    );
+    ).then((result) {
+      print(result);
+      // _callLogdialedEntries = result;
+    }).whenComplete(() {
+      isLoading = false;
+    });
     setState(() {
       isLoading = true;
     });
@@ -193,7 +199,7 @@ class _HomePageState extends State<HomePage>
     }
 
     return ListView.builder(
-      itemCount: 10,
+      itemCount: 5,
       itemBuilder: (BuildContext context, int position) {
         return Card(
           child: ListTile(
@@ -207,7 +213,7 @@ class _HomePageState extends State<HomePage>
 
   Widget recievedList() {
     return ListView.builder(
-      itemCount: 10,
+      itemCount: 5,
       itemBuilder: (BuildContext context, int position) {
         return Card(
           child: ListTile(
@@ -221,7 +227,7 @@ class _HomePageState extends State<HomePage>
 
   Widget talkedList() {
     return ListView.builder(
-      itemCount: 10,
+      itemCount: 5,
       itemBuilder: (BuildContext context, int position) {
         return Card(
           child: ListTile(
@@ -235,7 +241,7 @@ class _HomePageState extends State<HomePage>
 
   Widget missedList() {
     return ListView.builder(
-      itemCount: 10,
+      itemCount: 5,
       itemBuilder: (BuildContext context, int position) {
         return Card(
           child: ListTile(
