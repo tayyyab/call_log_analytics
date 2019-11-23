@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage>
 
   Widget dialedList() {
     if (_callLogdialedEntries.isEmpty) {
-      if (_date != 'Not set') {
+      if (_actualDate != null) {
         getDialedCalls();
       }
 
