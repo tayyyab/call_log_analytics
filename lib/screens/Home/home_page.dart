@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage>
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.all(5),
-                    child: dialedList(),
+                    child: _actualDate == null ? _date : dialedList(),
                   ),
                   Container(
                     padding: EdgeInsets.all(5),
