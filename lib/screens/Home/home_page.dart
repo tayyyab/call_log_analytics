@@ -1,3 +1,4 @@
+import 'package:call_log/call_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
@@ -10,7 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  String _date = "Not set";
+  dynamic _date = "Not set";
   TabController _tabController;
 
   @override
@@ -26,7 +27,6 @@ class _HomePageState extends State<HomePage>
         title: Text('Call Log'),
       ),
       body: Container(
-        height: 500,
         padding: EdgeInsets.all(20),
         child: Column(
           children: <Widget>[
@@ -130,13 +130,25 @@ class _HomePageState extends State<HomePage>
               ),
             ),
             Container(
-              height: 50,
+              height: MediaQuery.of(context).size.height - 300,
               child: TabBarView(
                 children: <Widget>[
-                  Text("Dialed"),
-                  Text("Recieved"),
-                  Text("Talked"),
-                  Text("Missed")
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    child: dialedList(),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    child: recievedList(),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    child: talkedList(),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    child: missedList(),
+                  ),
                 ],
                 controller: _tabController,
               ),
@@ -144,6 +156,90 @@ class _HomePageState extends State<HomePage>
           ],
         ),
       ),
+    );
+  }
+
+  Iterable<CallLogEntry> _callLogdialedEntries = [];
+  getDialedCalls() async {
+    _callLogdialedEntries = await CallLog.query(
+      dateFrom: _date,
+      dateTo: _date,
+      type: CallType.outgoing,
+    );
+    setState(() {
+      isLoading = true;
+    });
+  }
+
+  bool isLoading = false;
+
+  Widget dialedList() {
+    if (_callLogdialedEntries.isEmpty) {
+      if (_date != 'Not set') {
+        getDialedCalls();
+      }
+
+      return isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Container();
+    } else {
+      _callLogdialedEntries.forEach((f) => print(f.toString()));
+    }
+
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int position) {
+        return Card(
+          child: ListTile(
+            leading: Text('Ahmed Hussam'),
+            trailing: Text('113:44'),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget recievedList() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int position) {
+        return Card(
+          child: ListTile(
+            leading: Text('Ahmed Hussam'),
+            trailing: Text('113:44'),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget talkedList() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int position) {
+        return Card(
+          child: ListTile(
+            leading: Text('Ahmed Hussam'),
+            trailing: Text('113:44'),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget missedList() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int position) {
+        return Card(
+          child: ListTile(
+            leading: Text('Ahmed Hussam'),
+            trailing: Text('113:44'),
+          ),
+        );
+      },
     );
   }
 }
