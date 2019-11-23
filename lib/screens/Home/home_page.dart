@@ -11,7 +11,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  dynamic _date = "Not set";
+  DateTime _actualDate;
+  String _date;
+
   TabController _tabController;
 
   @override
@@ -40,12 +42,14 @@ class _HomePageState extends State<HomePage>
                       containerHeight: 210.0,
                     ),
                     showTitleActions: true,
-                    minTime: DateTime(2000, 1, 1),
+                    minTime: DateTime(2018, 1, 1),
                     maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
+                  _actualDate = date;
                   print('confirm $date');
                   _date = '${date.year} - ${date.month} - ${date.day}';
                   setState(() {});
                 }, currentTime: DateTime.now(), locale: LocaleType.en);
+                getDialedCalls();
               },
               child: Container(
                 alignment: Alignment.center,
@@ -162,8 +166,8 @@ class _HomePageState extends State<HomePage>
   Iterable<CallLogEntry> _callLogdialedEntries = [];
   getDialedCalls() async {
     _callLogdialedEntries = await CallLog.query(
-      dateFrom: _date,
-      dateTo: _date,
+      dateFrom: _actualDate.millisecondsSinceEpoch,
+      dateTo: _actualDate.millisecondsSinceEpoch + 86400,
       type: CallType.outgoing,
     );
     setState(() {
