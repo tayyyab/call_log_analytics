@@ -166,38 +166,57 @@ class _HomePageState extends State<HomePage>
   }
 
   getDialedCalls() async {
-    CallLog.query(
-      dateFrom: _actualDate.millisecondsSinceEpoch,
-      dateTo: _actualDate.millisecondsSinceEpoch + 86400,
-      type: CallType.outgoing,
-    ).then((result) {
-      print(result);
-      // _callLogdialedEntries = result;
-    }).whenComplete(() {
-      isLoading = false;
-    });
-    setState(() {
-      isLoading = true;
-    });
+    // CallLog.query(
+    //   dateFrom: _actualDate.subtract(Duration(days: 1)).millisecondsSinceEpoch,
+    //   dateTo: _actualDate
+    //       .subtract(Duration(microseconds: 1))
+    //       .millisecondsSinceEpoch,
+    //   type: CallType.outgoing,
+    // )
+    //     .then((result) {
+    //       print(result);
+    //       // _callLogdialedEntries = result;
+    //     })
+    //     .timeout(Duration(seconds: 5))
+    //     .whenComplete(() {
+    //       isLoading = false;
+    //     });
+    // setState(() {
+    //   isLoading = true;
+    // });
   }
 
   bool isLoading = false;
 
+  // Widget dialedList() {
+  //   if (_callLogdialedEntries.isEmpty) {
+  //     if (_actualDate != null) {
+  //       getDialedCalls();
+  //     }
+
+  //     return isLoading
+  //         ? Center(
+  //             child: CircularProgressIndicator(),
+  //           )
+  //         : Container();
+  //   } else {
+  //     _callLogdialedEntries.forEach((f) => print(f.toString()));
+  //   }
+
+  //   return ListView.builder(
+  //     itemCount: 5,
+  //     itemBuilder: (BuildContext context, int position) {
+  //       return Card(
+  //         child: ListTile(
+  //           leading: Text('Ahmed Hussam'),
+  //           trailing: Text('113:44'),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   Widget dialedList() {
-    if (_callLogdialedEntries.isEmpty) {
-      if (_actualDate != null) {
-        getDialedCalls();
-      }
-
-      return isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Container();
-    } else {
-      _callLogdialedEntries.forEach((f) => print(f.toString()));
-    }
-
     return ListView.builder(
       itemCount: 5,
       itemBuilder: (BuildContext context, int position) {
