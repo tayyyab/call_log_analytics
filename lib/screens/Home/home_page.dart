@@ -8,8 +8,16 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   String _date = "Not set";
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = new TabController(length: 4, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +26,9 @@ class _HomePageState extends State<HomePage> {
         title: Text('Call Log'),
       ),
       body: Container(
+        height: 500,
         padding: EdgeInsets.all(20),
-        child: ListView(
+        child: Column(
           children: <Widget>[
             RaisedButton(
               shape: RoundedRectangleBorder(
@@ -84,6 +93,54 @@ class _HomePageState extends State<HomePage> {
               color: Colors.blue,
             ),
             SizedBox(height: 10),
+            Container(
+              child: TabBar(
+                labelColor: Colors.blue,
+                controller: _tabController,
+                tabs: <Widget>[
+                  Tab(
+                    icon: Icon(Icons.call_made),
+                    child: Text(
+                      'Dialed',
+                      style: TextStyle(fontSize: 10),
+                    ),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.call_received),
+                    child: Text(
+                      'Received',
+                      style: TextStyle(fontSize: 10),
+                    ),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.call),
+                    child: Text(
+                      'Talked',
+                      style: TextStyle(fontSize: 10),
+                    ),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.call_missed),
+                    child: Text(
+                      'Missed',
+                      style: TextStyle(fontSize: 10),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: 50,
+              child: TabBarView(
+                children: <Widget>[
+                  Text("Dialed"),
+                  Text("Recieved"),
+                  Text("Talked"),
+                  Text("Missed")
+                ],
+                controller: _tabController,
+              ),
+            ),
           ],
         ),
       ),
